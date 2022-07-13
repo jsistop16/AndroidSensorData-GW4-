@@ -20,12 +20,5 @@
             android:layout_height="wrap_content"
             android:text="Step Count : 0"/>
 
-        <TextView
-            android:id="@+id/tvHeartRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Heart Rate : 0"
-            android:layout_marginTop="40dp"/>
-
     </FrameLayout>
 </androidx.wear.widget.BoxInsetLayout>

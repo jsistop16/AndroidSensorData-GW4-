@@ -25,11 +25,8 @@ public class MainActivity extends Activity {
     private ActivityMainBinding binding;
 
     private SensorManager smStep;// access the device's sensors
-    private SensorManager smHeart;
     private Sensor stepCounter;
-    private Sensor heartCounter;
     TextView stepTxt;
-    TextView heartTxt;
 
     //using the eventListener
     private SensorEventListener accLis;
@@ -48,38 +45,32 @@ public class MainActivity extends Activity {
         }//step_count & step_detector는 ACTIVITY_RECOGNITION에 대한 허가 필요
 
         stepTxt = binding.tvStepCount;
-        heartTxt = binding.tvHeartRate;
 
         smStep = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        smHeart = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         stepCounter = smStep.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         //stepCounter : 앱 종료와 관계없이 기존의 값유지 + 1씩 증가
         //stepDetector : 리턴값이 무조건 1, 앱이 종료되면 다시 0부터 시작
-        heartCounter = smHeart.getDefaultSensor(Sensor.TYPE_HEART_RATE);
 
         accLis = new SensorClass();//create Listener instance
 
         smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);//register to listener
-        smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);
 
         timer.schedule(timerTask, 0, 6000);
 
         if(stepCounter != null){
             Toast.makeText(this, "STEP", Toast.LENGTH_SHORT).show();
-        }else if(heartCounter != null) {
-            Toast.makeText(this, "HEARTRATE", Toast.LENGTH_SHORT).show();
         }
 
     }
+
+
 
     @Override
     protected void onStart() {
         super.onStart();
         if(stepCounter != null){
             smStep.registerListener(accLis, stepCounter,SensorManager.SENSOR_DELAY_NORMAL);
-        }else if (heartCounter != null) {
-            smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -93,7 +84,6 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-        smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);//Sensor_Delay_Normal : 값을 받는 주기 NORMAL = 0.2초당 한번
     }
     float realData;
     float dataStorage;//0
@@ -118,11 +108,6 @@ public class MainActivity extends Activity {
 
                 Log.d(sdf.format(timestamp), minVal[0]);*/
 
-            }else if (sensorEvent.sensor.getType() == Sensor.TYPE_HEART_RATE) {
-                Log.d("심장센서", String.valueOf(sensorEvent.values[0]));
-                if((int)sensorEvent.values[0] > 0){
-                    heartTxt.setText(String.valueOf(sensorEvent.values[0]));
-                }
             }
         }
 

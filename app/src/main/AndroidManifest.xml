@@ -8,10 +8,7 @@
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-feature android:name="android.hardware.sensor.stepdetector"/>
-    <uses-feature android:name="android.hardware.sensor.heartrate"/>
     <uses-feature android:name="android.hardware.sensor.stepcounter"/>
-    <uses-feature android:name="android.hardware.sensor.accelerometer"
-        android:required="true"/>
 
     <application
         android:allowBackup="true"
