@@ -144,7 +144,12 @@ public class MainActivity extends Activity {
             }
             dataStorage = realData;
             System.out.println("확인 : " + stepData);
-            // Toast.makeText(getApplicationContext(), "증가", Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {//Toast는 ui자원이므로 별도의 thread를 사용해야 접근가능
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), String.valueOf(stepData), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     };
 
