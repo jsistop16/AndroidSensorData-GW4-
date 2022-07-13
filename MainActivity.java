@@ -16,6 +16,7 @@ import com.example.sensorlistup.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+//클래스이름 바꿔서 사용해야함
 //to check whether a particular sensor is accessible or not before launching the application.
 public class MainActivity extends Activity {
 
