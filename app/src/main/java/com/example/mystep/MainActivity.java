@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
     TextView stepTxt;
     TextView heartTxt;
 
-    //using the accelerometer
+    //using the eventListener
     private SensorEventListener accLis;
 
 
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
         if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){//권한 체크 기능 : 디바이스에서 데이터 측정하는것을 허가해주는 팝업창 뜸
             requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
-        }
+        }//step_count & step_detector는 ACTIVITY_RECOGNITION에 대한 허가 필요
 
         stepTxt = binding.tvStepCount;
         heartTxt = binding.tvHeartRate;
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         //stepDetector : 리턴값이 무조건 1, 앱이 종료되면 다시 0부터 시작
         heartCounter = smHeart.getDefaultSensor(Sensor.TYPE_HEART_RATE);
 
-        accLis = new SensorClass();//create accelometerListener instance
+        accLis = new SensorClass();//create Listener instance
 
         smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);//register to listener
         smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);
