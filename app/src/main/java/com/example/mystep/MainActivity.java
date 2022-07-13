@@ -13,11 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
-
 import com.example.mystep.databinding.ActivityMainBinding;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends Activity {
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
     TextView stepTxt;
     TextView heartTxt;
 
-    //using the accelometer
+    //using the accelerometer
     private SensorEventListener accLis;
 
 
@@ -42,9 +43,9 @@ public class MainActivity extends Activity {
         setContentView(binding.getRoot());
 
         if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+                Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){//권한 체크 기능 : 디바이스에서 데이터 측정하는것을 허가해주는 팝업창 뜸
             requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 0);
-        }//권한 체크 기능 : 디바이스에서 데이터 측정하는것을 허가해주는 팝업창 뜸
+        }
 
         stepTxt = binding.tvStepCount;
         heartTxt = binding.tvHeartRate;
@@ -62,6 +63,7 @@ public class MainActivity extends Activity {
         smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);//register to listener
         smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);
 
+        timer.schedule(timerTask, 0, 6000);
 
         if(stepCounter != null){
             Toast.makeText(this, "STEP", Toast.LENGTH_SHORT).show();
@@ -93,14 +95,28 @@ public class MainActivity extends Activity {
         smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         smHeart.registerListener(accLis, heartCounter, SensorManager.SENSOR_DELAY_NORMAL);//Sensor_Delay_Normal : 값을 받는 주기 NORMAL = 0.2초당 한번
     }
+    float realData;
+    float dataStorage;//0
+    float stepData;
 
     private class SensorClass implements SensorEventListener{
+
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             if(sensorEvent.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
-                Log.d("센서1", "센서1");
-                Log.d("센서센서", String.valueOf(sensorEvent.values[0]));
-                stepTxt.setText(String.valueOf(sensorEvent.values[0]));
+                stepTxt.setText("Step Count : " + (sensorEvent.values[0]));
+
+                System.out.println("qwertyqwert" + (sensorEvent.values[0]));
+                realData = sensorEvent.values[0];
+
+
+
+                /*
+                //현재 시간 출력 - TimeStamp
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                Log.d(sdf.format(timestamp), minVal[0]);*/
 
             }else if (sensorEvent.sensor.getType() == Sensor.TYPE_HEART_RATE) {
                 Log.d("심장센서", String.valueOf(sensorEvent.values[0]));
@@ -110,9 +126,26 @@ public class MainActivity extends Activity {
             }
         }
 
+
+
+
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {// i = accuracy
             //
         }
     }
+
+    Timer timer = new Timer();
+    TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            if(dataStorage != 0){
+                stepData = realData - dataStorage;
+            }
+            dataStorage = realData;
+            System.out.println("확인 : " + stepData);
+            // Toast.makeText(getApplicationContext(), "증가", Toast.LENGTH_SHORT).show();
+        }
+    };
+
 }
