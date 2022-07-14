@@ -8,17 +8,38 @@
     tools:context=".MainActivity"
     tools:deviceIds="wear">
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/inner_frame_layout_padding"
-        app:layout_boxedEdges="all">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvStepCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Step Count : 0"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/inner_frame_layout_padding"
+            app:layout_boxedEdges="all">
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tvStepCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Step Count : 0"/>
+
+            <TextView
+                android:id="@+id/tvLight"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Light : 0"/>
+
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_marginTop="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temperature : 0"/>
+
+
+        </FrameLayout>
+
+    </ScrollView>
 </androidx.wear.widget.BoxInsetLayout>

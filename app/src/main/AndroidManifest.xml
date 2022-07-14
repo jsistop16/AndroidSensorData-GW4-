@@ -9,6 +9,10 @@
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-feature android:name="android.hardware.sensor.stepdetector"/>
     <uses-feature android:name="android.hardware.sensor.stepcounter"/>
+    <uses-feature android:name="android.hardware.sensor.light"
+        android:required="true"/>
+    <uses-feature android:name="android.hardware.sensor.ambient_temperature"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
