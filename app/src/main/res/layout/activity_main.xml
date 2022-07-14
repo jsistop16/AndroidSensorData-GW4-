@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.wear.widget.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,15 +32,18 @@
                 android:layout_height="wrap_content"
                 android:text="Light : 0"/>
 
+
             <TextView
-                android:id="@+id/tvTemp"
+                android:id="@+id/tvAcc"
                 android:layout_marginTop="60dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Temperature : 0"/>
+                android:text="Acc x, y, z : 0"/>
 
 
         </FrameLayout>
 
     </ScrollView>
+
+
 </androidx.wear.widget.BoxInsetLayout>

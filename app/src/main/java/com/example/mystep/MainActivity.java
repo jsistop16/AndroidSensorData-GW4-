@@ -36,11 +36,16 @@ public class MainActivity extends Activity {
     private Sensor light;
     private float lux;
     TextView lightTxt;
+    
+    //accelerometer
+    private SensorManager smAcc;
+    private Sensor acc;
+    TextView accTxt;
 
 
 
     //using the eventListener
-    private SensorEventListener accLis;
+    private SensorEventListener sListener;
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -59,22 +64,26 @@ public class MainActivity extends Activity {
         //viewBinding
         stepTxt = binding.tvStepCount;
         lightTxt = binding.tvLight;
+        accTxt = binding.tvAcc;
 
         //sensor manager
         smStep = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         smLight = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        smAcc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         //sensor
         stepCounter = smStep.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         light = smLight.getDefaultSensor(Sensor.TYPE_LIGHT);
+        acc = smAcc.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //stepCounter : 앱 종료와 관계없이 기존의 값유지 + 1씩 증가
         //stepDetector : 리턴값이 무조건 1, 앱이 종료되면 다시 0부터 시작
 
-        accLis = new SensorClass();//create Listener instance
+        sListener = new SensorClass();//create Listener instance
 
         //register to listener
-        smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-        smLight.registerListener(accLis, light, SensorManager.SENSOR_DELAY_NORMAL);
+        smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+        smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+        smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
 
         timer.schedule(timerTask, 60000, 60000);
 
@@ -83,6 +92,9 @@ public class MainActivity extends Activity {
         }
         if (light != null) {
             Toast.makeText(this, "LIGHT", Toast.LENGTH_SHORT).show();
+        }
+        if (acc != null) {
+            Toast.makeText(this, "ACC", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -93,24 +105,28 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         if(stepCounter != null){
-            smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+            smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if(light != null){
-            smLight.registerListener(accLis, light, SensorManager.SENSOR_DELAY_NORMAL);
+            smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (acc != null) {
+            smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //sm.unregisterListener(accLis);
+        //sm.unregisterListener(sListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        smStep.registerListener(accLis, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-        smLight.registerListener(accLis, light, SensorManager.SENSOR_DELAY_NORMAL);
+        smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+        smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+        smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
     }
     float realData;
     float dataStorage;//0
@@ -129,6 +145,14 @@ public class MainActivity extends Activity {
             if(sensorEvent.sensor.getType() == Sensor.TYPE_LIGHT){
                 lux = sensorEvent.values[0];
                 lightTxt.setText("Light : " + lux);
+            }
+            if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                double accX = sensorEvent.values[0];
+                double accY = sensorEvent.values[1];
+                double accZ = sensorEvent.values[2];
+
+                accTxt.setText("Acc x, y, z : " + String.format("%.1f", accX) + " " + String.format("%.1f", accY) + " " + String.format("%.1f", accZ));
+
             }
 
         }
