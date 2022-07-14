@@ -26,21 +26,27 @@ import java.util.TimerTask;
 public class MainActivity extends Activity {
     private ActivityMainBinding binding;
 
+
+    // access the device's sensors
+    private SensorManager sm;
+
+
     //step
-    private SensorManager smStep;// access the device's sensors
     private Sensor stepCounter;
     TextView stepTxt;
 
     //light
-    private SensorManager smLight;
     private Sensor light;
     private float lux;
     TextView lightTxt;
     
     //accelerometer
-    private SensorManager smAcc;
     private Sensor acc;
     TextView accTxt;
+
+    //GyroScope
+    private Sensor gyro;
+    TextView gyroTxt;
 
 
 
@@ -65,29 +71,31 @@ public class MainActivity extends Activity {
         stepTxt = binding.tvStepCount;
         lightTxt = binding.tvLight;
         accTxt = binding.tvAcc;
+        gyroTxt = binding.tvGyro;
 
         //sensor manager
-        smStep = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        smLight = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        smAcc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         //sensor
-        stepCounter = smStep.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        light = smLight.getDefaultSensor(Sensor.TYPE_LIGHT);
-        acc = smAcc.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //stepCounter : 앱 종료와 관계없이 기존의 값유지 + 1씩 증가
         //stepDetector : 리턴값이 무조건 1, 앱이 종료되면 다시 0부터 시작
+        stepCounter = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
+        acc = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyro = sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
 
         sListener = new SensorClass();//create Listener instance
 
         //register to listener
-        smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-        smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
-        smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
         timer.schedule(timerTask, 60000, 60000);
 
-        if(stepCounter != null){
+        if (stepCounter != null){
             Toast.makeText(this, "STEP", Toast.LENGTH_SHORT).show();
         }
         if (light != null) {
@@ -95,6 +103,9 @@ public class MainActivity extends Activity {
         }
         if (acc != null) {
             Toast.makeText(this, "ACC", Toast.LENGTH_SHORT).show();
+        }
+        if (gyro != null) {
+            Toast.makeText(this, "GYRO", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -105,13 +116,16 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         if(stepCounter != null){
-            smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+            sm.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if(light != null){
-            smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+            sm.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
         }
         if (acc != null) {
-            smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+            sm.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (gyro != null) {
+            sm.registerListener(sListener, gyro, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -124,9 +138,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        smStep.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
-        smLight.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
-        smAcc.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, light, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, acc, SensorManager.SENSOR_DELAY_NORMAL);
+        sm.registerListener(sListener, gyro, SensorManager.SENSOR_DELAY_NORMAL);
     }
     float realData;
     float dataStorage;//0
@@ -152,7 +167,13 @@ public class MainActivity extends Activity {
                 double accZ = sensorEvent.values[2];
 
                 accTxt.setText("Acc x, y, z : " + String.format("%.1f", accX) + " " + String.format("%.1f", accY) + " " + String.format("%.1f", accZ));
+            }
+            if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+                double gyroX = sensorEvent.values[0];
+                double gyroY = sensorEvent.values[1];
+                double gyroZ = sensorEvent.values[2];
 
+                gyroTxt.setText("Gyro x, y, z : " + String.format("%.1f", gyroX) + " " + String.format("%.1f", gyroY) + " " + String.format("%.1f", gyroZ));
             }
 
         }
