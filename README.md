@@ -3,8 +3,8 @@
 ## development using Android Sensor Data
 
 #### 사용 센서 리스트
-- [ ] LSM6DSO Accelerometer
-- [ ] LSM6DSO Gyroscope
+- [X] LSM6DSO Accelerometer
+- [X] LSM6DSO Gyroscope
 - [X] OPT3007 Light
 - [ ] AFE4500S ECG
 - [ ] Samsung HR Raw Sensor
