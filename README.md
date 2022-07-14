@@ -1,8 +1,25 @@
-# AndroidSensorData_StepCounter
+# AndroidSensorData - GW4
 
-## develop StepCounter using Android Sensor Data
+## development using Android Sensor Data
 
-#### 안드로이드 센서를 활용하여 1분마다 걸음 수의 증가량 데이터화
+#### 사용 센서 리스트
+- [ ] LSM6DSO Accelerometer
+- [ ] LSM6DSO Gyroscope
+- [X] OPT3007 Light
+- [ ] AFE4500S ECG
+- [ ] Samsung HR Raw Sensor
+- [ ] Samsung HR Sensor
+- [ ] Samsung Step Detector
+- [X] Samsung Step Counter
+- [ ] Samsung GPS Batch
+- [ ] Samsung Exercise Sensor
+- [ ] Samsung Pedometer
+- [ ] Samsung Stress Sensor
+- [ ] Samsung StairTracker Sensor
+- [ ] Samsung VO2 Sensor
+- [ ] Samsung Movement Sensor
+- [ ] Samsung Handwash Sensor
+- [ ] Samsung ActivityTracker Sensor
 
 * timeStamp : 1min
 * column : # of step(diff)
